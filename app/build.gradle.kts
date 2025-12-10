@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,6 +20,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Read API key from local.properties
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        val apiKey = properties.getProperty("TRANSIT_API_KEY") ?: ""
+
+        buildConfigField("String", "TRANSIT_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -38,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
